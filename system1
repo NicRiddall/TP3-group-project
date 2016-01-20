@@ -1,0 +1,96 @@
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <vector>
+#include <fstream>
+
+//c++ program to calculate simple poisson eqn in cylindrical coords
+// System 1 using an if loop to put in the boundary conditions.
+//Gives a segmentation fault when compiled 
+
+
+int main()
+{
+  using namespace std;
+
+  ofstream outf("Sample.dat");
+
+ double rg= 1; //radius of ground circle
+ double rv = 5; // radius of +V circle
+ double v0 = 10; //value of +V
+
+ double dt=0.1; //iteration step size
+ double tmax=10.0; //iteration stop point
+ int tstep = tmax/dt;
+ double dx=0.2;
+ double dy=0.2;
+
+ double xmax=5;
+ double xmin=-5;
+ double ymax=5;
+ double ymin=-5;
+
+ double xinnermax=1;
+ double xinnermin=-1;
+ double yinnermax=1;
+ double yinnermin=-1;
+
+ int  xstep=((xmax - xmin)/dx)/2;
+ int  ystep=((ymax-ymin)/dy)/2;
+
+ double V[tstep][xstep][ystep]; //multidimensional array
+
+ //boundary conditions
+ for ( int j =0 ; j < xstep; j++ ) {
+   for ( int k = 0; k < ystep; k++ ) {
+     for (int n = 0; n < tstep; n++ ) {
+  
+       if (j==0) 
+	 V[n][j][k]=0;
+       else if (k==0)
+	 V[n][j][k]=0;
+       else if (sqrt(pow((k*dy),2) + pow((j*dx),2))>pow(rv,2))
+	 break;
+       else if (sqrt(pow((k*dy),2) + pow((j*dx),2))<pow(rg,2))
+       V[n][j][k]=0;
+		else
+		  break;
+     }
+    }
+   }
+
+ /*
+//to fill in mulidimensional array
+ for ( int j =1 ; j < xstep; j++ ) {
+   for ( int k = 1; k < ystep; k++ ) {
+     for ( int n = 0; n < tstep; n++ ) {
+
+      if (j==0) 
+	 V[n][j][k]=0;
+       else if (k==0)
+	 V[n][j][k]=0;
+       else if (sqrt(pow((k*dy),2) + pow((j*dx),2))>pow(rv,2))
+	 break;
+       else if (sqrt(pow((k*dy),2) + pow((j*dx),2))<pow(rg,2))
+       V[n][j][k]=0;
+		else
+  V[n+1][j][k] = (1/4)*(V[n][j-1][k]+V[n][j+1][k]+V[n][j][k-1]+V[n][j][k+1]);
+      				 
+    }
+   }
+  }
+ */
+
+ outf<< "Table of electric Potential at different positions of (r, angle(degrees)) at max  time:"<<endl; 
+
+  for ( int j = 0; j < xstep; j++ ) {
+   for ( int k = 0; k < ystep; k++ ) {
+    
+     outf<< "("<<j<<","<<k<<")"<<V[tstep][j][k] <<endl;  
+   }
+ 
+  }
+ 
+    return 0;
+}
