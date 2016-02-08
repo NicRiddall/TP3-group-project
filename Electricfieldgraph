@@ -1,0 +1,14 @@
+gnuplot 
+
+//Lines of equipotential 
+set view map
+unset surface
+set dgrid3d
+set contour base
+set table 'equipo1.txt'
+splot "sys1.dat" with l
+unset table
+
+//Vector field 
+plot "sys1vector.dat" with vectors,\ 
+'equipo1.txt' with l
