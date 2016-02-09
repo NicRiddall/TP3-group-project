@@ -11,7 +11,7 @@ int main()
 {
   using namespace std;
 
-  ofstream outf("sys2.dat");
+  ofstream outf1("sys2.dat");
 
 cout << "Enter the voltage of the plates: "; 
   double v0 = 0;
@@ -104,9 +104,19 @@ for (int j=1; j<(xstep+1); j++){
   for ( int j = 0; j < xstep+2; j++ ) {
    for ( int k = 0; k < ystep+2; k++ ) {
     
-     outf<< j<<" "<< k<< " "<<u[j][k] <<endl;  
+     outf1<< j<<" "<< k<< " "<<u[j][k] <<endl;  
    }
    }
+outf1.close();
 
+ofstream outf2("sys2vector.dat");
+
+ for ( int j = 1; j < xstep-1; j++ ) {
+   for ( int k = 1; k < ystep-1; k++ ) {
+    
+     outf2<<j<<" "<<k<<" "<<((u[j-1][k]-u[j+1][k])/(2*dx))<< " " << ((u[j][k-1]-u[j][k+1])/(2*dy))  <<endl;  
+   }
+   }
+ outf2.close();
     return 0;
 }
